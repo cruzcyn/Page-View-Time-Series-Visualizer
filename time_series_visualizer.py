@@ -22,7 +22,7 @@ def draw_line_plot():
     line_df = df
 
     # Draw line plot
-    plt.figure(figsize=(12,6))
+    fig = plt.figure(figsize=(12,6))
     plt.plot(line_df.index, line_df["value"])
     plt.title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
     plt.xlabel("Date")
@@ -30,7 +30,7 @@ def draw_line_plot():
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
-    return fig
+    return fig.figure
 
 
 # TODO Create draw_bar_plot func
