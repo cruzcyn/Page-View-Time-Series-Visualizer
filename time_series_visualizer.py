@@ -19,7 +19,7 @@ df = df[(df["value"] >= (df["value"].quantile(0.025))) &
 # DRAW LINE PLOT
 def draw_line_plot():
     # Make copy of df
-    line_df = df
+    line_df = df.copy()
 
     # Draw line plot
     fig = plt.figure(figsize=(12,6))
@@ -33,25 +33,32 @@ def draw_line_plot():
     return fig.figure
 
 
-# TODO Create draw_bar_plot func
-# The chart should be similar to Figure_2
-# It should show average daily page views for each month grouped by year
-# Legend should show month labels and have a title of "Months"
-# Label on x axis: "Years"
-# Label on y axis: "Average Page Views"
+# DRAW BAR PLOT
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy()
+
+    df_bar["year"] = df.index.year
+    df_bar["month"] = df.index.month
+    df_bar = df_bar.groupby(["year", "month"], as_index=False).agg({"value": pd.Series.mean})
 
     # Draw bar plot
+    fig = sns.barplot(data=df_bar, 
+                           x="year", y="value", 
+                           hue="month", 
+                           palette="tab10")
 
+    plt.legend(title="Months")
 
+    plt.xlabel("Years")
+    plt.xticks(rotation=90)
 
+    plt.ylabel("Average Page Views")
 
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
-    return fig
+    return fig.figure
 
 
 # TODO Create draw_box_plot func.
