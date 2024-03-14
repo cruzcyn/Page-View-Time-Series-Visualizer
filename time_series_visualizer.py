@@ -22,11 +22,15 @@ df = df[(df["value"] >= (df["value"].quantile(0.025))) &
 # Label on x axis: "Date"
 # Label on y axis: "Page Views"
 def draw_line_plot():
-    # Draw line plot
+    # Make copy of df
     line_df = df
 
-
-
+    # Draw line plot
+    plt.figure(figsize=(12,6))
+    plt.plot(line_df.index, line_df["value"])
+    plt.title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
+    plt.xlabel("Date")
+    plt.ylabel("Page Views")
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
