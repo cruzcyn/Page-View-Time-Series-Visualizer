@@ -23,7 +23,7 @@ df = df[(df["value"] >= (df["value"].quantile(0.025))) &
 # Label on y axis: "Page Views"
 def draw_line_plot():
     # Draw line plot
-
+    line_df = df
 
 
 
