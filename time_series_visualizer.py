@@ -16,11 +16,7 @@ df = df[(df["value"] >= (df["value"].quantile(0.025))) &
 
 # USE A COPY OF THE DF FOR EACH CHART.
 
-# TODO Create draw_line_plot func.
-# It has to use Matplotlib to draw a line chart similar to Figure_1
-# The title should be: "Daily freeCodeCamp Forum Page Views 5/2016-12/2019"
-# Label on x axis: "Date"
-# Label on y axis: "Page Views"
+# DRAW LINE PLOT
 def draw_line_plot():
     # Make copy of df
     line_df = df
