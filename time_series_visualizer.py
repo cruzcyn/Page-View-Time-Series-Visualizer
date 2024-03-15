@@ -11,12 +11,10 @@ df = pd.read_csv("fcc-forum-pageviews.csv", index_col=0, parse_dates=["date"])
 # CLEAN DATA
 # Filter out values (which represent page views) that are above or below the top and bottom
 # 2.5% of the dataset respectively.
-df = df[(df["value"] >= (df["value"].quantile(0.025))) & 
-        (df["value"] <= (df["value"].quantile(0.975)))]
+df = df[(df["value"] > (df["value"].quantile(0.025))) & 
+        (df["value"] < (df["value"].quantile(0.975)))]
 
-# USE A COPY OF THE DF FOR EACH CHART.
 
-# DRAW LINE PLOT
 def draw_line_plot():
     # Make copy of df
     line_df = df.copy()
@@ -28,46 +26,45 @@ def draw_line_plot():
     plt.xlabel("Date")
     plt.ylabel("Page Views")
 
+    fig = fig.figure
+
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
-    return fig.figure
+    return fig
 
 
-# DRAW BAR PLOT
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
 
-    df_bar["year"] = df.index.year
-    df_bar["month"] = df.index.month
+    df_bar.reset_index(inplace=True)
+    df_bar["year"] = df_bar["date"].dt.year
+    df_bar["month"] = df_bar["date"].dt.month
     df_bar = df_bar.groupby(["year", "month"], as_index=False).agg({"value": pd.Series.mean})
 
     # Draw bar plot
-    fig = sns.barplot(data=df_bar, 
-                           x="year", y="value", 
-                           hue="month", 
-                           palette="tab10")
+    fig = sns.catplot(data=df_bar,
+                      x="year", y="value", 
+                      kind="bar",
+                      hue="month",
+                      palette="tab10",
+                      legend=False)
+    
+    fig.set_xlabels("Years")
+    fig.set_ylabels("Average Page Views")
 
-    plt.legend(title="Months")
-
-    plt.xlabel("Years")
+    plt.legend(labels=["January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"], 
+                       title="Months")
     plt.xticks(rotation=90)
 
-    plt.ylabel("Average Page Views")
-
+    fig = fig.figure
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
-    return fig.figure
+    return fig
 
 
-# TODO Create draw_box_plot func.
-# Use Seaborn to draw two adjacent box plots similar to Figure_3
-# The plots should show how the values are distributed within a given year or month and how it compares over time.
-# Title of the first plot: "Year-wise Box Plot (Trend)"
-# Title of the second plot: "Month-wise Box Plot (Seasonality)"
-# Make sure month labels on bottom start at "Jan"
-# Make sure x and y axes are labeled correctly.
 def draw_box_plot():
     # Prepare data for box plots (this part is done!)
     df_box = df.copy()
@@ -99,6 +96,8 @@ def draw_box_plot():
     box_2.set_xlabel("Month")
     box_2.set_ylabel("Page Views")
 
+    fig = fig.figure
+
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
-    return fig.figure
+    return fig
