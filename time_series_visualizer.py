@@ -76,11 +76,29 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
+    fig, (box_1, box_2) = plt.subplots(1,2, figsize=(13,5))
 
+    # FIRST PLOT
+    box_1 = sns.boxplot(data=df_box, 
+                    x="year", y="value", 
+                    hue="year", palette="tab10", 
+                    legend=False, ax=box_1)
 
+    box_1.set_title("Year-wise Box Plot (Trend)")
 
+    box_1.set_xlabel("Year")
+    box_1.set_ylabel("Page Views")
 
+    # SECOND PLOT
+    box_2 = sns.boxplot(data=df_box,
+                    x="month", y="value",
+                    order=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    hue="month", palette="husl",
+                    legend=False, ax=box_2)
+    box_2.set_title("Month-wise Box Plot (Seasonality)")
+    box_2.set_xlabel("Month")
+    box_2.set_ylabel("Page Views")
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
-    return fig
+    return fig.figure
