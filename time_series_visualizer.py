@@ -37,21 +37,15 @@ def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = df.copy()
 
-    df_bar.reset_index(inplace=True)
-    df_bar["year"] = df_bar["date"].dt.year
-    df_bar["month"] = df_bar["date"].dt.month
-    df_bar = df_bar.groupby(["year", "month"], as_index=False).agg({"value": pd.Series.mean})
+    df_bar["year"] = df_bar.index.year
+    df_bar["month"] = df_bar.index.month
+    df_bar = df_bar.groupby(["year", "month"])["value"].mean()
+    df_bar = df_bar.unstack(fill_value=0)
 
     # Draw bar plot
-    fig = sns.catplot(data=df_bar,
-                      x="year", y="value", 
-                      kind="bar",
-                      hue="month",
-                      palette="tab10",
-                      legend=False)
-    
-    fig.set_xlabels("Years")
-    fig.set_ylabels("Average Page Views")
+    fig = df_bar.plot.bar(legend=True, figsize=(13,9),
+                          ylabel="Average Page Views",
+                          xlabel="Years")
 
     plt.legend(labels=["January", "February", "March", "April", "May", "June",
                        "July", "August", "September", "October", "November", "December"], 
